@@ -1,6 +1,8 @@
 ﻿using Nancy;
 using Nancy.Json;
+using PhantomsForever_GRP.Core.Database;
 using PhantomsForever_GRP.Core.Objects;
+using PhantomsForever_GRP.Enums;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -32,11 +34,11 @@ namespace PhantomsForever_GRP.Core.Web.Modules
                 ppp.Param = "";
                 ppp.Torrent = new List<string>();
                 ppp.Torrent.Add("test");
-                ppp.Type = Enums.PatchType.Major;
+                ppp.Type = PatchType.Major;
                 ppp.Version = "1";
                 Package p = new Package();
                 p.Name = "test";
-                p.Type = Enums.PackageType.Required;
+                p.Type = PackageType.Required;
                 p.Patches = new List<Objects.Patch>();
                 p.Patches.Add(ppp);
                 pp.Add(p);
