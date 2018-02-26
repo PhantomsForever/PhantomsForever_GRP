@@ -59,6 +59,10 @@ namespace PhantomsForever_GRP.Core.PRUdp
                 var resp = "313f08000000000000000f8744db6a1b1887";
                 Send(resp.FromHex(), endpoint);
             }
+            else
+            {
+                Console.WriteLine("Unknown packet: " + hex);
+            }
         }
         public void Send(byte[] packet, IPEndPoint endpoint)
         {

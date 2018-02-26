@@ -14,7 +14,17 @@ namespace PhantomsForever_GRP.Core.Data
     {
         private static readonly string SettingsPath = Path.Combine(Application.StartupPath, "settings.xml");
         public static string RepositoryURL = @"https://github.com/PhantomsForever/PhantomsForever_GRP";
-        
+        public static string DiscordBotToken
+        {
+            get
+            {
+                return ReadValueSafe("DiscordBotToken");
+            }
+            set
+            {
+                WriteValue("DiscordBotToken", value.ToString());
+            }
+        }
         private static string ReadValue(string pstrValueToRead)
         {
             try

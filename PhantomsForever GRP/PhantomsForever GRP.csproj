@@ -70,6 +70,7 @@
     <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=1.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.1.1.1\lib\netstandard1.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Microsoft.Win32.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Win32.Primitives.4.3.0\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>
     </Reference>
@@ -169,6 +170,8 @@
   <ItemGroup>
     <Compile Include="Core\Database\DatabaseHandler.cs" />
     <Compile Include="Core\Data\Settings.cs" />
+    <Compile Include="Core\Discord\Commands\AdminCommands.cs" />
+    <Compile Include="Core\Discord\Commands\ModeratorCommands.cs" />
     <Compile Include="Core\Discord\PhantomsForeverBot.cs" />
     <Compile Include="Core\Extensions\ByteArrayExtensions.cs" />
     <Compile Include="Core\Extensions\StringExtensions.cs" />
@@ -178,6 +181,7 @@
     <Compile Include="Core\Objects\Package.cs" />
     <Compile Include="Core\Objects\Patch.cs" />
     <Compile Include="Core\Objects\UploaderSettings.cs" />
+    <Compile Include="Core\PRUdp\PRUdpPacket.cs" />
     <Compile Include="Core\PRUdp\PRUdpServer.cs" />
     <Compile Include="Core\Web\Modules\HomeModule.cs" />
     <Compile Include="Core\Web\WebServer.cs" />
