@@ -16,18 +16,11 @@ namespace PhantomsForever_GRP.Core.Discord.Commands
         [Summary("Mutes an idiot")]
         public async Task MuteAsync([Summary("The user to mute")] SocketUser user)
         {
-            try
+            var c = Context.Guild.GetUser(Context.User.Id);
+            if (c.Roles.Where(x => x.Name == "Moderators" || x.Name == "Administrators").Count() != 1)
             {
-                var role = Context.Guild.Roles.Where(x => x.Name == "Moderators");
-                var c = Context.Guild.GetUser(Context.User.Id);
-                if(c.Roles.Where(x => x == role).Count() != 1)
-                {
-                    await ReplyAsync("YOU can not execute mod commands :)");
-                }
-            }
-            catch(Exception)
-            {
-                await ReplyAsync("YOU can not execute mod commands :)");
+                await ReplyAsync("I'm afraid I can't let you do that, " + Context.User.Mention);
+                return;
             }
             var u = Context.Guild.GetUser(user.Id);
             var roles = u.Roles;

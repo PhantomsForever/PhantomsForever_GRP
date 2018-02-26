@@ -172,6 +172,7 @@
     <Compile Include="Core\Data\Settings.cs" />
     <Compile Include="Core\Discord\Commands\AdminCommands.cs" />
     <Compile Include="Core\Discord\Commands\ModeratorCommands.cs" />
+    <Compile Include="Core\Discord\Commands\PlayerModule.cs" />
     <Compile Include="Core\Discord\PhantomsForeverBot.cs" />
     <Compile Include="Core\Extensions\ByteArrayExtensions.cs" />
     <Compile Include="Core\Extensions\StringExtensions.cs" />
