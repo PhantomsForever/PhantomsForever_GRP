@@ -13,7 +13,7 @@ namespace PhantomsForever_GRP.Core.PRUdp
         {
             using (var _mem = new MemoryStream(bytes))
             {
-
+                return null;
             }
         }
     }
