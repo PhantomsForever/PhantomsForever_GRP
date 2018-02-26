@@ -169,12 +169,16 @@
   <ItemGroup>
     <Compile Include="Core\Database\DatabaseHandler.cs" />
     <Compile Include="Core\Data\Settings.cs" />
+    <Compile Include="Core\Discord\PhantomsForeverBot.cs" />
+    <Compile Include="Core\Extensions\ByteArrayExtensions.cs" />
+    <Compile Include="Core\Extensions\StringExtensions.cs" />
     <Compile Include="Core\Objects\Configuration.cs" />
     <Compile Include="Core\Objects\CredentialResponse.cs" />
     <Compile Include="Core\Objects\Credentials.cs" />
     <Compile Include="Core\Objects\Package.cs" />
     <Compile Include="Core\Objects\Patch.cs" />
     <Compile Include="Core\Objects\UploaderSettings.cs" />
+    <Compile Include="Core\PRUdp\PRUdpServer.cs" />
     <Compile Include="Core\Web\Modules\HomeModule.cs" />
     <Compile Include="Core\Web\WebServer.cs" />
     <Compile Include="Enums\PackageType.cs" />
@@ -186,9 +190,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Core\Discord\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Analyzer Include="..\packages\AsyncUsageAnalyzers.1.0.0-alpha003\analyzers\dotnet\AsyncUsageAnalyzers.dll" />
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.0.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />

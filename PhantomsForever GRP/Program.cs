@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PhantomsForever_GRP.Core.Web;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,9 @@ namespace PhantomsForever_GRP
     {
         static void Main(string[] args)
         {
-
+            var wserver = new WebServer();
+            wserver.Start();
+            Console.ReadLine();
         }
     }
 }
