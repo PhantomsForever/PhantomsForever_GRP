@@ -19,7 +19,7 @@ namespace PhantomsForever_GRP.Core.Discord.Commands
         {
             var u = Context.Guild.GetUser(user.Id);
             var roles = u.Roles;
-            await u.RemoveRolesAsync(roles);
+            await u.RemoveRolesAsync(roles.Where(x => x.IsEveryone != true));
             await u.AddRoleAsync(Context.Guild.Roles.FirstOrDefault(x => x.Name == "Muted"));
             await ReplyAsync("Muted " + user.Username);
         }
