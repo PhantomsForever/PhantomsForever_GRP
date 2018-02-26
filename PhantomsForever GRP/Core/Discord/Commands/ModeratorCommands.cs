@@ -10,13 +10,25 @@ using D = Discord;
 namespace PhantomsForever_GRP.Core.Discord.Commands
 {
     [Group("mod")]
-    [RequireUserPermission(D.GuildPermission.DeafenMembers)]
     public class ModeratorCommands : ModuleBase<SocketCommandContext>
     {
         [Command("mute")]
         [Summary("Mutes an idiot")]
         public async Task MuteAsync([Summary("The user to mute")] SocketUser user)
         {
+            try
+            {
+                var role = Context.Guild.Roles.Where(x => x.Name == "Moderators");
+                var c = Context.Guild.GetUser(Context.User.Id);
+                if(c.Roles.Where(x => x == role).Count() != 1)
+                {
+                    await ReplyAsync("YOU can not execute mod commands :)");
+                }
+            }
+            catch(Exception)
+            {
+                await ReplyAsync("YOU can not execute mod commands :)");
+            }
             var u = Context.Guild.GetUser(user.Id);
             var roles = u.Roles;
             await u.RemoveRolesAsync(roles.Where(x => x.IsEveryone != true));
