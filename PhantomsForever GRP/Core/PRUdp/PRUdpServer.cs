@@ -59,13 +59,19 @@ namespace PhantomsForever_GRP.Core.PRUdp
             var hex = data.ToHex();
             if(hex.Equals("3f3120000000000000000000000034322000"))
             {
+                var packet = PRUdpPacket.Decode(data);
                 var resp = "313f08000000000000000f8744db6a1b1887";
+                var packet1 = PRUdpPacket.Decode(resp.FromHex());
                 Send(resp.FromHex(), endpoint);
             }
             else
             {
                 var packet = PRUdpPacket.Decode(data);
-                if(packet.Type == PacketTypes.CONNECT)
+                if(packet.Type == PacketTypes.PING)
+                {
+                    //todo, ping handling code
+                }
+                else if(packet.Type == PacketTypes.CONNECT)
                 {
                     var response = new PRUdpPacket()
                     {
@@ -75,7 +81,8 @@ namespace PhantomsForever_GRP.Core.PRUdp
                         Signature = packet.Signature
                     };
                     var p = response.Encode();
-                    Send(p, endpoint);
+                    var h = "313f0900" + packet.Signature + "e80001db44870f";
+                    Send(h.FromHex(), endpoint);
                 }
                 else if(packet.Type == PacketTypes.DATA)
                 {

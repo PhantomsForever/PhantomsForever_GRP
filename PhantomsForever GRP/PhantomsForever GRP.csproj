@@ -177,7 +177,9 @@
     <Compile Include="Core\Discord\Commands\ModeratorCommands.cs" />
     <Compile Include="Core\Discord\Commands\PlayerModule.cs" />
     <Compile Include="Core\Discord\PhantomsForeverBot.cs" />
+    <Compile Include="Core\Extensions\BitArrayExtensions.cs" />
     <Compile Include="Core\Extensions\ByteArrayExtensions.cs" />
+    <Compile Include="Core\Extensions\IntegerExtensions.cs" />
     <Compile Include="Core\Extensions\StringExtensions.cs" />
     <Compile Include="Core\Objects\Configuration.cs" />
     <Compile Include="Core\Objects\CredentialResponse.cs" />
