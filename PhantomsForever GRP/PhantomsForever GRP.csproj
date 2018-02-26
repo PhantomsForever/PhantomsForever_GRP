@@ -35,6 +35,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Discord.Net.Commands, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Discord.Net.Commands.2.0.0-beta\lib\netstandard1.1\Discord.Net.Commands.dll</HintPath>
@@ -187,12 +190,15 @@
     <Compile Include="Core\Web\Modules\HomeModule.cs" />
     <Compile Include="Core\Web\WebServer.cs" />
     <Compile Include="Enums\PackageType.cs" />
+    <Compile Include="Enums\PacketFlags.cs" />
+    <Compile Include="Enums\PacketTypes.cs" />
     <Compile Include="Enums\PatchType.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="app.manifest" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />

@@ -12,7 +12,7 @@ namespace PhantomsForever_GRP.Core.Web
         private NancyHost host;
         public WebServer()
         {
-            host = new NancyHost(new Uri[] { new Uri("") });
+            host = new NancyHost(new Uri[] { new Uri("http://127.0.0.1") });
         }
         public void Start()
         {
