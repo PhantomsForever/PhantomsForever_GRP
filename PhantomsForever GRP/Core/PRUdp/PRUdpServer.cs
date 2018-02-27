@@ -57,11 +57,12 @@ namespace PhantomsForever_GRP.Core.PRUdp
         private void Handle(byte[] data, IPEndPoint endpoint)
         {
             var hex = data.ToHex();
+            Console.WriteLine("Received: " + hex);
             if(hex.Equals("3f3120000000000000000000000034322000"))
             {
-                var packet = PRUdpPacket.Decode(data);
+                //var packet = PRUdpPacket.Decode(data);
                 var resp = "313f08000000000000000f8744db6a1b1887";
-                var packet1 = PRUdpPacket.Decode(resp.FromHex());
+                //var packet1 = PRUdpPacket.Decode(resp.FromHex());
                 Send(resp.FromHex(), endpoint);
             }
             else
@@ -78,11 +79,12 @@ namespace PhantomsForever_GRP.Core.PRUdp
                         Flags = new PacketFlags[]{ PacketFlags.FLAG_ACK },
                         Type = PacketTypes.CONNECT,
                         SessionId = packet.SessionId,
-                        Signature = packet.Signature
+                        Signature = packet.Signature,
+                        ConnectionSignature = packet.ConnectionSignature
                     };
                     var p = response.Encode();
                     var h = "313f0900" + packet.Signature + "e80001db44870f";
-                    Send(h.FromHex(), endpoint);
+                    Send(p, endpoint);
                 }
                 else if(packet.Type == PacketTypes.DATA)
                 {
