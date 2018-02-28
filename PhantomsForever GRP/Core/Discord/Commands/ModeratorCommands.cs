@@ -50,31 +50,31 @@ namespace PhantomsForever_GRP.Core.Discord.Commands
             {
                 case "second":
                 case "seconds":
-                    dt.AddSeconds(t);
+                    dt = dt.AddSeconds(t);
                     break;
                 case "minute":
                 case "minutes":
-                    dt.AddMinutes(t);
+                    dt = dt.AddMinutes(t);
                     break;
                 case "hour":
                 case "hours":
-                    dt.AddHours(t);
+                    dt = dt.AddHours(t);
                     break;
                 case "day":
                 case "days":
-                    dt.AddDays(t);
+                    dt = dt.AddDays(t);
                     break;
                 case "week":
                 case "weeks":
-                    dt.AddDays(t * 7);
+                    dt = dt.AddDays(t * 7);
                     break;
                 case "month":
                 case "months":
-                    dt.AddMonths(t);
+                    dt = dt.AddMonths(t);
                     break;
                 case "year":
                 case "years":
-                    dt.AddYears(t);
+                    dt = dt.AddYears(t);
                     break;
                 default:
                     await ReplyAsync("The time you specified is invalid, " + Context.User.Mention);
