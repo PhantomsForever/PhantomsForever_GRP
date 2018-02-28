@@ -12,7 +12,7 @@ namespace PhantomsForever_GRP.Core.Database
 {
     public class DiscordDatabaseHandler
     {
-        private static readonly string DbPath = Path.Combine(Application.ExecutablePath, "discord.sqlite");
+        private static readonly string DbPath = Path.Combine(Application.StartupPath, "discord.sqlite");
         private static readonly string ConnectionString = "Data Source=" + DbPath + ";Version=3;";
         public static void Install()
         {

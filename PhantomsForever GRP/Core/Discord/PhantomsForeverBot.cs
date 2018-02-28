@@ -25,7 +25,7 @@ namespace PhantomsForever_GRP.Core.Discord
         private System.Timers.Timer _updateTimer;
         public PhantomsForeverBot()
         {
-            if (!File.Exists(Path.Combine(Application.ExecutablePath, "discord.sqlite")))
+            if (!File.Exists(Path.Combine(Application.StartupPath, "discord.sqlite")))
                 DiscordDatabaseHandler.Install();
             Instance = this;
             _updateTimer = new System.Timers.Timer(60000);
