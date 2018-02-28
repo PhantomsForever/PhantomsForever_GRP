@@ -1,4 +1,5 @@
-﻿using PhantomsForever_GRP.Core.Extensions;
+﻿using PhantomsForever_GRP.Core.Discord;
+using PhantomsForever_GRP.Core.Extensions;
 using PhantomsForever_GRP.Core.PRUdp;
 using PhantomsForever_GRP.Core.Web;
 using System;
@@ -17,6 +18,8 @@ namespace PhantomsForever_GRP
             wserver.Start();
             var pserver = new PRUdpServer();
             pserver.Listen(10264);
+            var bot = new PhantomsForeverBot();
+            bot.Start();
             Console.ReadLine();
         }
     }

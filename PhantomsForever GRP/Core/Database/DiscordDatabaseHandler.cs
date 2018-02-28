@@ -20,6 +20,23 @@ namespace PhantomsForever_GRP.Core.Database
             {
                 "create table mutes (id varchar(128), roles varchar(512), untill varchar(150))"
             };
+            if (!File.Exists(DbPath))
+                SQLiteConnection.CreateFile(DbPath);
+            using (var CONN = new SQLiteConnection(ConnectionString))
+            {
+                CONN.Open();
+                using (var tr = CONN.BeginTransaction())
+                {
+                    foreach(var query in queries)
+                    {
+                        using (var COMMAND = new SQLiteCommand(query, CONN, tr))
+                        {
+                            COMMAND.ExecuteNonQuery();
+                        }
+                    }
+                    tr.Commit();
+                }
+            }
         }
         public static void MuteUser(string id, string roles, string untill)
         {
@@ -28,6 +45,7 @@ namespace PhantomsForever_GRP.Core.Database
             {
                 using (var CONN = new SQLiteConnection(ConnectionString))
                 {
+                    CONN.Open();
                     using (var COMMAND = new SQLiteCommand(query, CONN))
                     {
                         COMMAND.Parameters.Add(new SQLiteParameter("@id", id));
@@ -49,6 +67,7 @@ namespace PhantomsForever_GRP.Core.Database
             {
                 using (var CONN = new SQLiteConnection(ConnectionString))
                 {
+                    CONN.Open();
                     using (var COMMAND = new SQLiteCommand(query, CONN))
                     {
                         using (var READER = COMMAND.ExecuteReader())
@@ -73,6 +92,7 @@ namespace PhantomsForever_GRP.Core.Database
             {
                 using (var CONN = new SQLiteConnection(ConnectionString))
                 {
+                    CONN.Open();
                     using (var COMMAND = new SQLiteCommand(query, CONN))
                     {
                         COMMAND.Parameters.Add(new SQLiteParameter("@id", id));
