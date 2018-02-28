@@ -3,27 +3,45 @@ using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using PhantomsForever_GRP.Core.Data;
+using PhantomsForever_GRP.Core.Database;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
+using System.Windows.Forms;
 
 namespace PhantomsForever_GRP.Core.Discord
 {
     public class PhantomsForeverBot
     {
+        internal static PhantomsForeverBot Instance;
         private DiscordSocketClient _client;
         private IServiceProvider _services;
         private CommandService _commands;
+        private System.Timers.Timer _updateTimer;
         public PhantomsForeverBot()
         {
+            if (!File.Exists(Path.Combine(Application.ExecutablePath, "discord.sqlite")))
+                DiscordDatabaseHandler.Install();
+            Instance = this;
+            _updateTimer = new System.Timers.Timer(60000);
+            _updateTimer.Elapsed += _updateTimer_Elapsed;
             _client = new DiscordSocketClient();
             _commands = new CommandService();
             _services = new ServiceCollection().AddSingleton(_client).AddSingleton(_commands).BuildServiceProvider();
             _client.Log += _client_Log;
             _client.MessageReceived += MessageReceived;
+        }
+
+        private void _updateTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            _updateTimer.Stop();
+            DiscordDatabaseHandler.CheckTimers();
+            _updateTimer.Start();
         }
 
         public async Task Start()
@@ -52,6 +70,18 @@ namespace PhantomsForever_GRP.Core.Discord
             var result = await _commands.ExecuteAsync(context, argPos, _services);
             if (!result.IsSuccess)
                 await context.Channel.SendMessageAsync(result.ErrorReason);
+        }
+        internal void UnmuteUser(string id, string roles)
+        {
+            var user = _client.GetGuild(Settings.Guild).GetUser(Convert.ToUInt64(id));
+            user.RemoveRoleAsync(user.Roles.Where(x => x.Name == "Muted").First());
+            foreach(var role in roles.Split(';'))
+            {
+                if (string.IsNullOrEmpty(role))
+                    continue;
+                var guildrole = _client.GetGuild(Settings.Guild).Roles.Where(x => x.Name == role).First();
+                user.AddRoleAsync(guildrole);
+            }
         }
     }
 }

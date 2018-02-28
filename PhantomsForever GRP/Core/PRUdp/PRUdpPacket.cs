@@ -43,6 +43,7 @@ namespace PhantomsForever_GRP.Core.PRUdp
             packet += "00";// "db44870f";
             packet += "0001";//packet number
             packet += ConnectionSignature; //encrypted empty payload, static
+            packet += "db44870f";
             packet += CalculateChecksum(packet); //calculate checksum to append at the end
             return packet.FromHex();
         }

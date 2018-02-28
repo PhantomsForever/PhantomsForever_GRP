@@ -25,6 +25,17 @@ namespace PhantomsForever_GRP.Core.Data
                 WriteValue("DiscordBotToken", value.ToString());
             }
         }
+        public static ulong Guild
+        {
+            get
+            {
+                return Convert.ToUInt64(ReadValueSafe("Guild"));
+            }
+            set
+            {
+                WriteValue("Guild", value.ToString());
+            }
+        }
         private static string ReadValue(string pstrValueToRead)
         {
             try
