@@ -65,6 +65,7 @@ namespace PhantomsForever_GRP.Core.Database
             var query = "select * from mutes";
             try
             {
+                var users = new Dictionary<string, string>();
                 using (var CONN = new SQLiteConnection(ConnectionString))
                 {
                     CONN.Open();
@@ -72,13 +73,18 @@ namespace PhantomsForever_GRP.Core.Database
                     {
                         using (var READER = COMMAND.ExecuteReader())
                         {
-                            if(DateTime.Parse((string)READER["untill"]) <= DateTime.Now)
+                            while(READER.Read())
                             {
-                                Unmute((string)READER["id"], (string)READER["roles"]);
+                                if (DateTime.Parse((string)READER["untill"]) <= DateTime.Now)
+                                {
+                                    users.Add((string)READER["id"], (string)READER["roles"]);
+                                }
                             }
                         }
                     }
                 }
+                foreach(var user in users)
+                    Unmute(user.Key, user.Value);
             }
             catch (Exception)
             {

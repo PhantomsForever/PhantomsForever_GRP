@@ -36,6 +36,17 @@ namespace PhantomsForever_GRP.Core.Data
                 WriteValue("Guild", value.ToString());
             }
         }
+        public static ulong LogChannel
+        {
+            get
+            {
+                return Convert.ToUInt64(ReadValueSafe("LogChannel"));
+            }
+            set
+            {
+                WriteValue("LogChannel", value.ToString());
+            }
+        }
         private static string ReadValue(string pstrValueToRead)
         {
             try

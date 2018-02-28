@@ -46,6 +46,7 @@ namespace PhantomsForever_GRP.Core.Discord
 
         public async Task Start()
         {
+            _updateTimer.Start();
             Console.WriteLine("Registering Commands...");
             await _commands.AddModulesAsync(Assembly.GetEntryAssembly());
             Console.WriteLine("Done");
@@ -75,6 +76,8 @@ namespace PhantomsForever_GRP.Core.Discord
         {
             var user = _client.GetGuild(Settings.Guild).GetUser(Convert.ToUInt64(id));
             user.RemoveRoleAsync(user.Roles.Where(x => x.Name == "Muted").First());
+            Console.WriteLine("Auto unmuting " + user.Username);
+            Log("Auto unmuting " + user.Username);
             foreach(var role in roles.Split(';'))
             {
                 if (string.IsNullOrEmpty(role))
@@ -82,6 +85,11 @@ namespace PhantomsForever_GRP.Core.Discord
                 var guildrole = _client.GetGuild(Settings.Guild).Roles.Where(x => x.Name == role).First();
                 user.AddRoleAsync(guildrole);
             }
+        }
+        internal void Log(string msg)
+        {
+            var channel = _client.GetGuild(Settings.Guild).GetTextChannel(Settings.LogChannel);
+            channel.SendMessageAsync(DateTime.Now + ": " + msg);
         }
     }
 }
