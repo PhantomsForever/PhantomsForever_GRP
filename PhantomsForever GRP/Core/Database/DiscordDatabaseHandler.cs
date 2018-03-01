@@ -91,6 +91,34 @@ namespace PhantomsForever_GRP.Core.Database
 
             }
         }
+        public static void Unmute(string id)
+        {
+            var query = "select roles from mutes where id=@id";
+            try
+            {
+                string roles = "";
+                using (var CONN = new SQLiteConnection(ConnectionString))
+                {
+                    CONN.Open();
+                    using (var COMMAND = new SQLiteCommand(query, CONN))
+                    {
+                        COMMAND.Parameters.Add(new SQLiteParameter("@id", id));
+                        using (var READER = COMMAND.ExecuteReader())
+                        {
+                            while(READER.Read())
+                            {
+                                roles = (string)READER["roles"];
+                            }
+                        }
+                    }
+                }
+                PhantomsForeverBot.Instance.UnmuteUser(id, roles);
+            }
+            catch (Exception)
+            {
+
+            }
+        }
         public static void Unmute(string id, string roles)
         {
             var query = "delete from mutes where id=@id";

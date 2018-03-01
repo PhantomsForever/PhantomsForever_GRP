@@ -91,5 +91,19 @@ namespace PhantomsForever_GRP.Core.Discord.Commands
             PhantomsForeverBot.Instance.Log(Context.User.Username + " muted " + user.Username + " untill " + dt.ToString());
             await ReplyAsync("Muted " + user.Username + " untill " + dt.ToString());
         }
+        [Command("unmute")]
+        [Summary("Mutes an idiot for a specified time")]
+        public async Task UnmuteAsync([Summary("The user to unmute")] SocketUser user, [Summary("The reason to unmute")] string reason)
+        {
+            var c = Context.Guild.GetUser(Context.User.Id);
+            if (c.Roles.Where(x => x.Name == "Moderators" || x.Name == "Administrator").Count() != 1)
+            {
+                await ReplyAsync("I'm afraid I can't let you do that, " + Context.User.Mention);
+                return;
+            }
+            DiscordDatabaseHandler.Unmute(user.Id.ToString());
+            PhantomsForeverBot.Instance.Log(Context.User.Username + " unmuted " + user.Username + " and gave reason: " + reason);
+            await ReplyAsync("Unmuted " + user.Username);
+        }
     }
 }
