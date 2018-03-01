@@ -193,6 +193,7 @@
     <Compile Include="Core\Discord\Commands\AdminCommands.cs" />
     <Compile Include="Core\Discord\Commands\ModeratorCommands.cs" />
     <Compile Include="Core\Discord\Commands\PlayerModule.cs" />
+    <Compile Include="Core\Discord\ConditionAttributes\RequireModeratorAttribute.cs" />
     <Compile Include="Core\Discord\PhantomsForeverBot.cs" />
     <Compile Include="Core\Extensions\BitArrayExtensions.cs" />
     <Compile Include="Core\Extensions\ByteArrayExtensions.cs" />

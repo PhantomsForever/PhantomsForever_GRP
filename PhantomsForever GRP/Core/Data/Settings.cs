@@ -47,6 +47,17 @@ namespace PhantomsForever_GRP.Core.Data
                 WriteValue("LogChannel", value.ToString());
             }
         }
+        public static ulong ModeratorRole
+        {
+            get
+            {
+                return Convert.ToUInt64(ReadValueSafe("ModeratorRole"));
+            }
+            set
+            {
+                WriteValue("ModeratorRole", value.ToString());
+            }
+        }
         private static string ReadValue(string pstrValueToRead)
         {
             try

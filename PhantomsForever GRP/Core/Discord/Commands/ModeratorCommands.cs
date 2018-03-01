@@ -1,6 +1,7 @@
 ﻿using Discord.Commands;
 using Discord.WebSocket;
 using PhantomsForever_GRP.Core.Database;
+using PhantomsForever_GRP.Core.Discord.ConditionAttributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,18 +12,13 @@ using D = Discord;
 namespace PhantomsForever_GRP.Core.Discord.Commands
 {
     [Group("mod")]
+    [RequireModerator]
     public class ModeratorCommands : ModuleBase<SocketCommandContext>
     {
         [Command("mute")]
         [Summary("Mutes an idiot")]
         public async Task MuteAsync([Summary("The user to mute")] SocketUser user)
         {
-            var c = Context.Guild.GetUser(Context.User.Id);
-            if (c.Roles.Where(x => x.Name == "Moderators" || x.Name == "Administrator").Count() != 1)
-            {
-                await ReplyAsync("I'm afraid I can't let you do that, " + Context.User.Mention);
-                return;
-            }
             var u = Context.Guild.GetUser(user.Id);
             var roles = u.Roles;
             string r = "";
@@ -38,12 +34,6 @@ namespace PhantomsForever_GRP.Core.Discord.Commands
         [Summary("Mutes an idiot for a specified time")]
         public async Task MuteAsync([Summary("The user to mute")] SocketUser user, string time, string btime)
         {
-            var c = Context.Guild.GetUser(Context.User.Id);
-            if (c.Roles.Where(x => x.Name == "Moderators" || x.Name == "Administrator").Count() != 1)
-            {
-                await ReplyAsync("I'm afraid I can't let you do that, " + Context.User.Mention);
-                return;
-            }
             var dt = DateTime.Now;
             var t = int.Parse(time);
             switch (btime.ToLower())
@@ -95,12 +85,6 @@ namespace PhantomsForever_GRP.Core.Discord.Commands
         [Summary("Unmutes an idiot, needs a reason")]
         public async Task UnmuteAsync([Summary("The user to unmute")] SocketUser user, [Summary("The reason to unmute")][RemainderAttribute] string reason)
         {
-            var c = Context.Guild.GetUser(Context.User.Id);
-            if (c.Roles.Where(x => x.Name == "Moderators" || x.Name == "Administrator").Count() != 1)
-            {
-                await ReplyAsync("I'm afraid I can't let you do that, " + Context.User.Mention);
-                return;
-            }
             DiscordDatabaseHandler.Unmute(user.Id.ToString());
             PhantomsForeverBot.Instance.Log(Context.User.Username + " unmuted " + user.Username + " and gave reason: " + reason);
             await ReplyAsync("Unmuted " + user.Username);
