@@ -1,5 +1,6 @@
 ﻿using Discord.Commands;
 using Discord.WebSocket;
+using PhantomsForever_GRP.Core.Discord.ConditionAttributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 namespace PhantomsForever_GRP.Core.Discord.Commands
 {
     [Group("admin")]
-    [RequireOwner]
+    [RequireAdministrator]
     public class AdminCommands : ModuleBase<SocketCommandContext>
     {
         [Command("ban")]

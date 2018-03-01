@@ -75,6 +75,8 @@ namespace PhantomsForever_GRP.Core.Database
                         {
                             while(READER.Read())
                             {
+                                if (READER.FieldCount == 0 || !READER.HasRows)
+                                    continue;
                                 if (DateTime.Parse((string)READER["untill"]) <= DateTime.Now)
                                 {
                                     users.Add((string)READER["id"], (string)READER["roles"]);
