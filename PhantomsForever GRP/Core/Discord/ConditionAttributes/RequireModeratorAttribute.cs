@@ -14,7 +14,10 @@ namespace PhantomsForever_GRP.Core.Discord.ConditionAttributes
         {
             var user = services.GetService<DiscordSocketClient>().GetGuild(Settings.Guild).GetUser(context.User.Id);
             if (user.Roles.Where(x => x.Id == Settings.ModeratorRole).Count() != 1)
+            {
+                PhantomsForeverBot.Instance.Log(user.Username + " tried executing " + command.ToString());
                 return PreconditionResult.FromError("You need to be in the moderators group");
+            }
             else
                 return PreconditionResult.FromSuccess();
         }
