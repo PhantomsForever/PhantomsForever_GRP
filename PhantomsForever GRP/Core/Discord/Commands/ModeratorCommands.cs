@@ -92,8 +92,8 @@ namespace PhantomsForever_GRP.Core.Discord.Commands
             await ReplyAsync("Muted " + user.Username + " untill " + dt.ToString());
         }
         [Command("unmute")]
-        [Summary("Mutes an idiot for a specified time")]
-        public async Task UnmuteAsync([Summary("The user to unmute")] SocketUser user, [Summary("The reason to unmute")] string reason)
+        [Summary("Unmutes an idiot, needs a reason")]
+        public async Task UnmuteAsync([Summary("The user to unmute")] SocketUser user, [Summary("The reason to unmute")][RemainderAttribute] string reason)
         {
             var c = Context.Guild.GetUser(Context.User.Id);
             if (c.Roles.Where(x => x.Name == "Moderators" || x.Name == "Administrator").Count() != 1)
