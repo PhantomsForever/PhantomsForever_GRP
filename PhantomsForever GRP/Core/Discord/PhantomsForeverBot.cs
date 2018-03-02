@@ -19,7 +19,7 @@ namespace PhantomsForever_GRP.Core.Discord
     public class PhantomsForeverBot
     {
         internal static PhantomsForeverBot Instance;
-        private DiscordSocketClient _client;
+        internal DiscordSocketClient _client { get; private set; }
         private IServiceProvider _services;
         private CommandService _commands;
         private System.Timers.Timer _updateTimer;

@@ -191,6 +191,7 @@
     <Compile Include="Core\Database\DiscordDatabaseHandler.cs" />
     <Compile Include="Core\Data\Settings.cs" />
     <Compile Include="Core\Discord\Commands\AdminCommands.cs" />
+    <Compile Include="Core\Discord\Commands\HiringModule.cs" />
     <Compile Include="Core\Discord\Commands\ModeratorCommands.cs" />
     <Compile Include="Core\Discord\Commands\PlayerModule.cs" />
     <Compile Include="Core\Discord\ConditionAttributes\RequireAdministratorAttribute.cs" />
