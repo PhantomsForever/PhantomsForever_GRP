@@ -11,5 +11,4 @@ hexval = args.hex[0]
 data = bytearray.fromhex(hexval)
 data = zlib.decompress(data)
 final = ''.join('{:02x}'.format(x) for x in data)
-print('\n')
 print(final)
