@@ -84,6 +84,7 @@ namespace PhantomsForever_GRP.Core.PRUdp
                     };
                     var p = response.Encode();
                     var h = "313f0900" + packet.Signature + "e80001db44870f";
+                    Console.WriteLine("Sent: " + p.ToHex());
                     Send(p, endpoint);
                 }
                 else if(packet.Type == PacketTypes.DATA)

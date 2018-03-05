@@ -1,4 +1,5 @@
-﻿using PhantomsForever_GRP.Core.Extensions;
+﻿using PhantomsForever_GRP.Core.Cryptography;
+using PhantomsForever_GRP.Core.Extensions;
 using PhantomsForever_GRP.Core.Python;
 using PhantomsForever_GRP.Core.Utilities;
 using PhantomsForever_GRP.Enums;
@@ -38,11 +39,11 @@ namespace PhantomsForever_GRP.Core.PRUdp
             int[] bits = typenflags.PadLeft(8, '0').Select(c => int.Parse(c.ToString())).ToArray();
             var b = bits.ToBitArray().ToHex();
             packet += b; //type and flags
-            packet += SessionId; //sessionid
-            packet += Signature; //packet signature
+            packet += "00"; //sessionid
+            packet += ConnectionSignature; //connection signature
             packet += "00";// "db44870f";
             packet += "0001";//packet number
-            packet += ConnectionSignature; //encrypted empty payload, static
+            //packet += ConnectionSignature; //encrypted empty payload, static//my head hurts....
             packet += "db44870f";
             packet += CalculateChecksum(packet); //calculate checksum to append at the end
             return packet.FromHex();
@@ -55,7 +56,7 @@ namespace PhantomsForever_GRP.Core.PRUdp
         {
             var hex = bytes.ToHex();
             var str = hex.Substring(4, 2);
-            string sessionid = "", sig = "", seqnum = "", connsig = "";
+            string sessionid = "", sig = "", seqnum = "", connsig = "", fragid = "", payload = "";
             var typenflags = str.FromHexToBits();
             var checksum = hex.Substring(hex.Length - 8);
             int[] data = new int[typenflags.Count];
@@ -77,11 +78,19 @@ namespace PhantomsForever_GRP.Core.PRUdp
                 sig = hex.Substring(8, 8);
                 seqnum = hex.Substring(16, 4);
                 connsig = hex.Substring(20, 8);
-                var f = connsig.Substring(0, 2);
+                /*var f = connsig.Substring(0, 2);
                 var ff = connsig.Substring(2, 2);
                 var fff = connsig.Substring(4, 2);
                 var ffff = connsig.Substring(6, 2);
-                connsig = ffff + fff + ff + f;
+                connsig = ffff + fff + ff + f;*/
+            }
+            else if(packet.Type == PacketTypes.DATA)
+            {
+                sessionid = hex.Substring(6, 2);
+                sig = hex.Substring(8, 8);
+                seqnum = hex.Substring(16, 4);
+                fragid = hex.Substring(20, 2);
+                payload = PythonScript.DecompressPacketPayload(RC4.Decrypt(Encoding.ASCII.GetBytes("CD&ML"), hex.Substring(22, hex.Length - 30).FromHex()).ToHex()).Result;
             }
             else
             {
@@ -92,6 +101,7 @@ namespace PhantomsForever_GRP.Core.PRUdp
             packet.Signature = sig;
             packet.Checksum = checksum;
             packet.ConnectionSignature = connsig;
+            packet.Payload = payload;
             return packet;
         }
     }

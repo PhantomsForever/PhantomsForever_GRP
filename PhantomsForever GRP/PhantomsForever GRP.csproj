@@ -187,6 +187,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Cryptography\RC4.cs" />
     <Compile Include="Core\Database\DatabaseHandler.cs" />
     <Compile Include="Core\Database\DiscordDatabaseHandler.cs" />
     <Compile Include="Core\Data\Settings.cs" />
@@ -196,6 +197,7 @@
     <Compile Include="Core\Discord\Commands\PlayerModule.cs" />
     <Compile Include="Core\Discord\ConditionAttributes\RequireAdministratorAttribute.cs" />
     <Compile Include="Core\Discord\ConditionAttributes\RequireModeratorAttribute.cs" />
+    <Compile Include="Core\Discord\ConditionAttributes\RequireTeamAttribute.cs" />
     <Compile Include="Core\Discord\PhantomsForeverBot.cs" />
     <Compile Include="Core\Extensions\BitArrayExtensions.cs" />
     <Compile Include="Core\Extensions\ByteArrayExtensions.cs" />
@@ -226,7 +228,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Core\Cryptography\" />
+    <EmbeddedResource Include="Core\Python\decompress.py" />
+    <EmbeddedResource Include="Core\Python\checksum.py" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\AsyncUsageAnalyzers.1.0.0-alpha003\analyzers\dotnet\AsyncUsageAnalyzers.dll" />

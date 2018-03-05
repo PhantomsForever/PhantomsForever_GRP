@@ -52,6 +52,8 @@ namespace PhantomsForever_GRP.Core.Discord
             Console.WriteLine("Done");
             if(string.IsNullOrEmpty(Settings.DiscordBotToken))
                 Settings.DiscordBotToken = Microsoft.VisualBasic.Interaction.InputBox("Please enter a bot id for discord");
+            if (string.IsNullOrEmpty(Settings.DiscordBotToken))
+                return;
             await _client.LoginAsync(TokenType.Bot, Settings.DiscordBotToken);
             await _client.StartAsync();
             await Task.Delay(-1);

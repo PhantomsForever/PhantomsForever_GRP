@@ -25,6 +25,17 @@ namespace PhantomsForever_GRP.Core.Data
                 WriteValue("DiscordBotToken", value.ToString());
             }
         }
+        public static string Python36Path
+        {
+            get
+            {
+                return ReadValueSafe("Python36Path", "C:\\Python36\\python.exe");
+            }
+            set
+            {
+                WriteValue("Python36Path", value.ToString());
+            }
+        }
         public static ulong Guild
         {
             get
@@ -67,6 +78,17 @@ namespace PhantomsForever_GRP.Core.Data
             set
             {
                 WriteValue("ModeratorRole", value.ToString());
+            }
+        }
+        public static ulong TeamRole
+        {
+            get
+            {
+                return Convert.ToUInt64(ReadValueSafe("TeamRole"));
+            }
+            set
+            {
+                WriteValue("TeamRole", value.ToString());
             }
         }
         private static string ReadValue(string pstrValueToRead)
