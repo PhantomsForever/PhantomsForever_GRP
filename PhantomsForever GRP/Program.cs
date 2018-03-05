@@ -41,15 +41,5 @@ namespace PhantomsForever_GRP
             bot.Start();
             Console.ReadLine();
         }
-        public static void CopyStream(System.IO.Stream input, System.IO.Stream output)
-        {
-            byte[] buffer = new byte[2000];
-            int len;
-            while ((len = input.Read(buffer, 0, 2000)) > 0)
-            {
-                output.Write(buffer, 0, len);
-            }
-            output.Flush();
-        }
     }
 }
