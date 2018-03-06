@@ -1,6 +1,7 @@
 ﻿using PhantomsForever_GRP.Core.Cryptography;
 using PhantomsForever_GRP.Core.Extensions;
 using PhantomsForever_GRP.Core.Python;
+using PhantomsForever_GRP.Core.RMC;
 using PhantomsForever_GRP.Core.Utilities;
 using PhantomsForever_GRP.Enums;
 using System;
@@ -20,6 +21,8 @@ namespace PhantomsForever_GRP.Core.PRUdp
         public PacketFlags[] Flags { get; set; }
         public string SessionId { get; set; }
         public string Payload { get; set; }
+        public RMCPayload RMCPayload { get; set; }
+        public string Method { get; set; }
         public string Signature { get; set; }
         public string Checksum { get; set; }
         public string ConnectionSignature { get; set; }
@@ -90,7 +93,8 @@ namespace PhantomsForever_GRP.Core.PRUdp
                 sig = hex.Substring(8, 8);
                 seqnum = hex.Substring(16, 4);
                 fragid = hex.Substring(20, 2);
-                payload = PythonScript.DecompressPacketPayload(RC4.Decrypt(Encoding.ASCII.GetBytes("CD&ML"), hex.Substring(22, hex.Length - 30).FromHex()).ToHex()).Result;
+                payload = PythonScript.DecompressPacketPayload(RC4.Decrypt(Encoding.ASCII.GetBytes("CD&ML"), hex.Substring(22, hex.Length - 30).FromHex()).ToHex().Substring(2)).Result;
+                packet.RMCPayload = RMCPayload.Decode(payload);
             }
             else
             {

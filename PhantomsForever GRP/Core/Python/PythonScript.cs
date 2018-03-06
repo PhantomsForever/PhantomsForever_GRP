@@ -44,7 +44,7 @@ namespace PhantomsForever_GRP.Core.Python
                 Install();
             var psi = new ProcessStartInfo(Settings.Python36Path)
             {
-                Arguments = CheckSumScript + " " + hex,
+                Arguments = string.Format("\"{0}\"", CheckSumScript) + " " + hex,
                 RedirectStandardInput = true,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
@@ -63,7 +63,7 @@ namespace PhantomsForever_GRP.Core.Python
                 Install();
             var psi = new ProcessStartInfo(Settings.Python36Path)
             {
-                Arguments = DecompressScript + " " + hex,
+                Arguments = string.Format("\"{0}\"", DecompressScript) + " " + hex,
                 RedirectStandardInput = true,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,

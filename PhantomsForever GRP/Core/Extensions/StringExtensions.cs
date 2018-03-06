@@ -30,5 +30,12 @@ namespace PhantomsForever_GRP.Core.Extensions
             }
             return ba;
         }
+        public static Decimal FromHexToDecimal(this String str)
+        {
+            str = str.Replace("x", string.Empty);
+            long result = 0;
+            long.TryParse(str, System.Globalization.NumberStyles.HexNumber, null, out result);
+            return result;
+        }
     }
 }

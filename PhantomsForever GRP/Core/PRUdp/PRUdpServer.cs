@@ -89,6 +89,7 @@ namespace PhantomsForever_GRP.Core.PRUdp
                 }
                 else if(packet.Type == PacketTypes.DATA)
                 {
+                    Console.WriteLine("Data payload: " + packet.Payload);
                     //do interesting stuff with data packet
                 }
                 else

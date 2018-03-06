@@ -206,12 +206,16 @@
     <Compile Include="Core\Objects\Configuration.cs" />
     <Compile Include="Core\Objects\CredentialResponse.cs" />
     <Compile Include="Core\Objects\Credentials.cs" />
+    <Compile Include="Core\Objects\LoginData.cs" />
     <Compile Include="Core\Objects\Package.cs" />
     <Compile Include="Core\Objects\Patch.cs" />
+    <Compile Include="Core\Objects\RVConnectionData.cs" />
     <Compile Include="Core\Objects\UploaderSettings.cs" />
     <Compile Include="Core\PRUdp\PRUdpPacket.cs" />
     <Compile Include="Core\PRUdp\PRUdpServer.cs" />
     <Compile Include="Core\Python\PythonScript.cs" />
+    <Compile Include="Core\RMC\Methods\Simple-Authentication.cs" />
+    <Compile Include="Core\RMC\RMCPayload.cs" />
     <Compile Include="Core\Utilities\Struct.cs" />
     <Compile Include="Core\Web\Modules\HomeModule.cs" />
     <Compile Include="Core\Web\WebServer.cs" />
