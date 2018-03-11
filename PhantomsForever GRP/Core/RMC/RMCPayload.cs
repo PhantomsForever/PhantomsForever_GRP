@@ -15,6 +15,18 @@ namespace PhantomsForever_GRP.Core.RMC
         public string CallId { get; set; }
         public string MethodId { get; set; }
         public string Payload { get; set; }
+        public string Encode()
+        {
+            var hex = "";
+            var size = ProtocolId.Length + 2 + CallId.Length + MethodId.Length + Payload.Length;
+            hex += size.ToString("X").FromHex().Reverse().ToArray().ToHex();
+            hex += ProtocolId;
+            hex += "01";
+            hex += CallId;
+            hex += MethodId;
+            hex += Payload;
+            return hex;
+        }
         public static RMCPayload Decode(string hex)
         {
             var payload = new RMCPayload();

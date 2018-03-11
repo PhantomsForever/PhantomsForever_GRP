@@ -12,10 +12,18 @@ namespace PhantomsForever_GRP.Core.Extensions
     {
         public static byte[] FromHex(this String str)
         {
-            return Enumerable.Range(0, str.Length)
-                     .Where(x => x % 2 == 0)
-                     .Select(x => Convert.ToByte(str.Substring(x, 2), 16))
-                     .ToArray();
+            try
+            {
+                int NumberChars = str.Length;
+                byte[] bytes = new byte[NumberChars / 2];
+                for (int i = 0; i < NumberChars; i += 2)
+                    bytes[i / 2] = Convert.ToByte(str.Substring(i, 2), 16);
+                return bytes;
+            }
+            catch(Exception ex)
+            {
+                return null;
+            }
         }
         public static BitArray FromHexToBits(this String str)
         {

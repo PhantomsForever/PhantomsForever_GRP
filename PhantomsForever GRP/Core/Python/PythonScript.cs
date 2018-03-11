@@ -14,6 +14,7 @@ namespace PhantomsForever_GRP.Core.Python
     public class PythonScript
     {
         private static readonly string CheckSumScript = Path.Combine(Application.StartupPath, "checksum.py");
+        private static readonly string CompressScript = Path.Combine(Application.StartupPath, "compress.py");
         private static readonly string DecompressScript = Path.Combine(Application.StartupPath, "decompress.py");
         private static void Install()
         {
@@ -22,6 +23,16 @@ namespace PhantomsForever_GRP.Core.Python
                 using (var resource = Assembly.GetExecutingAssembly().GetManifestResourceStream("PhantomsForever_GRP.Core.Python.checksum.py"))
                 {
                     using (var file = new FileStream(CheckSumScript, FileMode.Create, FileAccess.Write))
+                    {
+                        resource.CopyTo(file);
+                    }
+                }
+            }
+            if (!File.Exists(CompressScript))
+            {
+                using (var resource = Assembly.GetExecutingAssembly().GetManifestResourceStream("PhantomsForever_GRP.Core.Python.compress.py"))
+                {
+                    using (var file = new FileStream(CompressScript, FileMode.Create, FileAccess.Write))
                     {
                         resource.CopyTo(file);
                     }
@@ -64,6 +75,25 @@ namespace PhantomsForever_GRP.Core.Python
             var psi = new ProcessStartInfo(Settings.Python36Path)
             {
                 Arguments = string.Format("\"{0}\"", DecompressScript) + " " + hex,
+                RedirectStandardInput = true,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false
+            };
+            var proc = Process.Start(psi);
+            var _error = proc.StandardError;
+            var _writer = proc.StandardInput;
+            var _reader = proc.StandardOutput;
+            var d = _error.ReadToEnd();
+            return await _reader.ReadLineAsync();
+        }
+        public static async Task<string> CompressPacketPayload(string hex)
+        {
+            if (!File.Exists(CompressScript))
+                Install();
+            var psi = new ProcessStartInfo(Settings.Python36Path)
+            {
+                Arguments = string.Format("\"{0}\"", CompressScript) + " " + hex,
                 RedirectStandardInput = true,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,

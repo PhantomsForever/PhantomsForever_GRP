@@ -16,10 +16,15 @@ namespace PhantomsForever_GRP.Core.Web.Modules
     {
         public HomeModule() : base("/")
         {
+            Get("/", args =>
+            {
+                Console.WriteLine("Request: " + this.Context.Request.Path);
+                return "";
+            });
             Get("/OnlineConfigService.svc/GetOnlineConfig", args =>
             {
                 Console.WriteLine("Request: " + this.Context.Request.Path);
-                //return "[{\"Name\":\"SandboxUrl\",\"Values\":[\"prudp:\\/ address = lb - pdc - 192.168.0.178; port = 22700\"]}]";
+                //return "[{\"Name\":\"SandboxUrl\",\"Values\":[\"prudp:\\/address=127.0.0.1;port=22700\"]},{\"Name\":\"SandboxUrlWS\",\"Values\":[\"127.0.0.1:22700\"]},{\"Name\":\"uplay_DownloadServiceUrl\",\"Values\":[\"http:\\/127.0.0.1\"]},{\"Name\":\"uplay_DynContentBaseUrl\",\"Values\":[\"http:\\/127.0.0.1\"]},{\"Name\":\"uplay_DynContentSecureBaseUrl\",\"Values\":[\"http:\\/127.0.0.1\"]},{\"Name\":\"uplay_PackageBaseUrl\",\"Values\":[\"http:\\/127.0.0.1\"]},{\"Name\":\"uplay_WebServiceBaseUrl\",\"Values\":[\"http:\\/127.0.0.1\"]}]";
                 return "[{\"Name\":\"SandboxUrl\",\"Values\":[\"prudp:\\/ address = lb - pdc - 192.168.0.178; port = 22700\"]},{\"Name\":\"SandboxUrlWS\",\"Values\":[\"lb - pdc - 192.168.0.178:22700\"]}]";
             });
             Get("/Version/PDC-Live_Packages.txt", args =>

@@ -12,6 +12,21 @@ namespace PhantomsForever_GRP.Core.Objects
         public string StationUrl { get; set; }
         public string SpecialProtocols { get; set; }
         public string StationUrl2 { get; set; }
+        public string Encode()
+        {
+            var hex = "";
+            var surlhex = Encoding.UTF8.GetBytes(StationUrl).Reverse().ToArray().ToHex();
+            var s = surlhex.Length.ToString("X").FromHex().Reverse().ToArray().ToHex();
+            hex += "010001";
+            hex += "0001";
+            hex += s;
+            hex += surlhex;
+            hex += "00000000";
+            hex += s;
+            hex += surlhex;
+            hex += "00000000";
+            return hex;
+        }
         public static RVConnectionData Decode(string hex)
         {
             var data = new RVConnectionData();

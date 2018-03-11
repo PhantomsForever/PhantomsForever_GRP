@@ -1,4 +1,6 @@
 ﻿using PhantomsForever_GRP.Core.Extensions;
+using PhantomsForever_GRP.Core.Objects;
+using PhantomsForever_GRP.Core.RMC;
 using PhantomsForever_GRP.Enums;
 using System;
 using System.Collections;
@@ -83,14 +85,34 @@ namespace PhantomsForever_GRP.Core.PRUdp
                         ConnectionSignature = packet.ConnectionSignature
                     };
                     var p = response.Encode();
-                    var h = "313f0900" + packet.Signature + "e80001db44870f";
                     Console.WriteLine("Sent: " + p.ToHex());
                     Send(p, endpoint);
                 }
                 else if(packet.Type == PacketTypes.DATA)
                 {
-                    Console.WriteLine("Data payload: " + packet.Payload);
-                    //do interesting stuff with data packet
+                    var rvconndata = new RVConnectionData()
+                    {
+                        StationUrl = "prudps:/127.0.0.1:10264"
+                    };
+                    var rmc = new RMCPayload()
+                    {
+                        CallId = packet.RMCPayload.CallId,
+                        MethodId = packet.RMCPayload.MethodId,
+                        ProtocolId = packet.RMCPayload.ProtocolId,
+                        Payload = rvconndata.Encode()
+                    };
+                    var response = new PRUdpPacket()
+                    {
+                        Flags = new PacketFlags[] { PacketFlags.FLAG_ACK, PacketFlags.FLAG_NEED_ACK },
+                        Type = PacketTypes.DATA,
+                        SessionId = packet.SessionId,
+                        Signature = packet.Signature,
+                        Payload = rmc.Encode(),
+                        ConnectionSignature = packet.ConnectionSignature
+                    };
+                    var p = response.Encode().ToHex();
+                    Console.WriteLine("Sent: " + p);
+                    Send(p.FromHex(), endpoint);
                 }
                 else
                 {

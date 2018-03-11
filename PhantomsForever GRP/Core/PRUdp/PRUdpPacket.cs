@@ -43,11 +43,21 @@ namespace PhantomsForever_GRP.Core.PRUdp
             var b = bits.ToBitArray().ToHex();
             packet += b; //type and flags
             packet += "00"; //sessionid
-            packet += ConnectionSignature; //connection signature
+            if (Type != PacketTypes.DATA)
+                packet += ConnectionSignature; //connection signature
+            else
+                packet += "5790aecd";//cdae9057
             packet += "00";// "db44870f";
             packet += "0001";//packet number
             //packet += ConnectionSignature; //encrypted empty payload, static//my head hurts....
             packet += "db44870f";
+            if (!string.IsNullOrEmpty(Payload))
+            {
+                packet += "00";
+                Payload = PythonScript.CompressPacketPayload(RC4.Encrypt(Encoding.ASCII.GetBytes("CD&ML"), Payload.FromHex()).ToHex()).Result;
+                packet += "02";
+            }
+            packet += Payload;
             packet += CalculateChecksum(packet); //calculate checksum to append at the end
             return packet.FromHex();
         }
