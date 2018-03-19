@@ -70,6 +70,22 @@ namespace PhantomsForever_GRP.Core.PRUdp
             else
             {
                 var packet = PRUdpPacket.Decode(data);
+                if(packet.Flags.Contains(PacketFlags.FLAG_NEED_ACK))
+                {
+                    var response = new PRUdpPacket()
+                    {
+                        Flags = new PacketFlags[] { PacketFlags.FLAG_ACK },
+                        Type = PacketTypes.DATA,
+                        SessionId = "a1",
+                        Signature = packet.Signature,
+                        ConnectionSignature = packet.ConnectionSignature,
+                        PacketId = packet.PacketId,
+                        FragmentId = packet.FragmentId
+                    };
+                    var p = response.Encode().ToHex();
+                    //Console.WriteLine("Sent: " + p);
+                    //Send(p.FromHex(), endpoint);
+                }
                 if(packet.Type == PacketTypes.PING)
                 {
                     //todo, ping handling code
@@ -78,8 +94,9 @@ namespace PhantomsForever_GRP.Core.PRUdp
                 {
                     var response = new PRUdpPacket()
                     {
-                        Flags = new PacketFlags[]{ PacketFlags.FLAG_ACK },
+                        Flags = new PacketFlags[] { PacketFlags.FLAG_ACK },
                         Type = PacketTypes.CONNECT,
+                        PacketId = "0000",
                         SessionId = packet.SessionId,
                         Signature = packet.Signature,
                         ConnectionSignature = packet.ConnectionSignature
@@ -103,7 +120,7 @@ namespace PhantomsForever_GRP.Core.PRUdp
                     };
                     var response = new PRUdpPacket()
                     {
-                        Flags = new PacketFlags[] { PacketFlags.FLAG_ACK, PacketFlags.FLAG_NEED_ACK },
+                        Flags = new PacketFlags[] { PacketFlags.FLAG_RELIABLE, PacketFlags.FLAG_NEED_ACK },
                         Type = PacketTypes.DATA,
                         SessionId = packet.SessionId,
                         Signature = packet.Signature,
