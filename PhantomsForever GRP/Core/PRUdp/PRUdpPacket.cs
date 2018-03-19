@@ -19,54 +19,47 @@ namespace PhantomsForever_GRP.Core.PRUdp
     {
         public PacketTypes Type { get; set; }
         public PacketFlags[] Flags { get; set; }
-        public byte[] PacketId { get; set; }
-        public byte[] FragmentId { get; set; }
-        public byte[] SessionId { get; set; }
-        public byte[] Payload { get; set; }
+        public string SessionId { get; set; }
+        public string Payload { get; set; }
         public RMCPayload RMCPayload { get; set; }
-        public byte[] Method { get; set; }
-        public byte[] Signature { get; set; }
-        public byte[] Checksum { get; set; }
-        public byte[] ConnectionSignature { get; set; }
+        public string Method { get; set; }
+        public string Signature { get; set; }
+        public string Checksum { get; set; }
+        public string ConnectionSignature { get; set; }
         public byte[] Encode()
         {
-            using(var mem = new MemoryStream())
-            using (var bw = new BinaryWriter(mem))
+            var packet = "313f";
+            var s = Convert.ToString((int)Type, 2);
+            if (s.Length != 3)
+                s = s.PadLeft(3 - s.Length + 1, '0');
+            var iii = 0;
+            foreach(var fl in Flags)
+                iii += (int)fl;
+            var s1 = Convert.ToString(iii, 2);
+            if(s1.Length != 5)
+                s1 = s1.PadLeft(5 - s1.Length + 1, '0');
+            var typenflags = s1 + s;
+            int[] bits = typenflags.PadLeft(8, '0').Select(c => int.Parse(c.ToString())).ToArray();
+            var b = bits.ToBitArray().ToHex();
+            packet += b; //type and flags
+            packet += "00"; //sessionid
+            if (Type != PacketTypes.DATA)
+                packet += ConnectionSignature; //connection signature
+            else
+                packet += "5790aecd";//cdae9057
+            packet += "00";// "db44870f";
+            packet += "0001";//packet number
+            //packet += ConnectionSignature; //encrypted empty payload, static//my head hurts....
+            packet += "db44870f";
+            if (!string.IsNullOrEmpty(Payload))
             {
-                bw.Write("313f".FromHex());
-                var s = Convert.ToString((int)Type, 2);
-                if (s.Length != 3)
-                    s = s.PadLeft(3 - s.Length + 1, '0');
-                var iii = 0;
-                foreach (var fl in Flags)
-                    iii += (int)fl;
-                var s1 = Convert.ToString(iii, 2);
-                if (s1.Length != 5)
-                    s1 = s1.PadLeft(5 - s1.Length + 1, '0');
-                var typenflags = s1 + s;
-                int[] bits = typenflags.PadLeft(8, '0').Select(c => int.Parse(c.ToString())).ToArray();
-                var b = bits.ToBitArray().ToHex();
-                bw.Write(b.FromHex());
-                bw.Write(SessionId);
-                if (Type != PacketTypes.DATA)
-                    bw.Write(ConnectionSignature);
-                else
-                    if (!string.IsNullOrEmpty(ConnectionSignature.ToHex()))
-                        bw.Write(ConnectionSignature.ToHex().Substring(0, ConnectionSignature.Length - 2).FromHex().Reverse().ToArray());//a2c1e170
-                bw.Write(PacketId);
-                if (Type == PacketTypes.DATA)
-                    bw.Write(FragmentId);
-                bw.Write("db44870f".FromHex());
-                if (Payload != null)
-                {
-                    bw.Write("00".FromHex());
-                    Payload = PythonScript.CompressPacketPayload(RC4.Encrypt(Encoding.ASCII.GetBytes("CD&ML"), Payload).ToHex()).Result.FromHex();
-                    bw.Write("02".FromHex());
-                    bw.Write(Payload);
-                }
-                bw.Write(CalculateChecksum(mem.ToArray().ToHex()));
-                return mem.ToArray();
+                packet += "00";
+                Payload = PythonScript.CompressPacketPayload(RC4.Encrypt(Encoding.ASCII.GetBytes("CD&ML"), Payload.FromHex()).ToHex()).Result;
+                packet += "02";
             }
+            packet += Payload;
+            packet += CalculateChecksum(packet); //calculate checksum to append at the end
+            return packet.FromHex();
         }
         public static string CalculateChecksum(string hex, string accesskey = "cH0on9AsIXx7")
         {
@@ -74,54 +67,56 @@ namespace PhantomsForever_GRP.Core.PRUdp
         }
         public static PRUdpPacket Decode(byte[] bytes)
         {
-            var packet = new PRUdpPacket();
-            using (var br = new BinaryReader(new MemoryStream(bytes)))
-            {
-                var ports = br.ReadBytes(4);
-                PacketTypes t;
-                PacketFlags[] f;
-                ParseTypenFlags(br.ReadBytes(1), out f, out t);
-                packet.Type = t;
-                packet.Flags = f;
-                var sessid = br.ReadBytes(1);
-                var sig = br.ReadBytes(4);
-                var seqn = br.ReadBytes(2);
-                var connsig = new byte[4];
-                var fragid = new byte[1];
-                var payload = "";
-                if (packet.Type == PacketTypes.SYN || packet.Type == PacketTypes.CONNECT)
-                {
-                    connsig = br.ReadBytes(4);
-                }
-                else if (packet.Type == PacketTypes.DATA)
-                {
-                    fragid = br.ReadBytes(1);
-                    var hex = bytes.ToHex();
-                    payload = PythonScript.DecompressPacketPayload(RC4.Decrypt(Encoding.ASCII.GetBytes("CD&ML"), hex.Substring(22, hex.Length - 30).FromHex()).ToHex().Substring(2)).Result;
-                }
-                packet.SessionId = sessid;
-                packet.Signature = sig;
-                packet.ConnectionSignature = connsig;
-                packet.FragmentId = fragid;
-                packet.Payload = payload.FromHex();
-            }
-            return packet;
-        }
-        private static void ParseTypenFlags(byte[] arr, out PacketFlags[] flags, out PacketTypes types)
-        {
-            var typenflags = new BitArray(arr);
+            var hex = bytes.ToHex();
+            var str = hex.Substring(4, 2);
+            string sessionid = "", sig = "", seqnum = "", connsig = "", fragid = "", payload = "";
+            var typenflags = str.FromHexToBits();
+            var checksum = hex.Substring(hex.Length - 8);
             int[] data = new int[typenflags.Count];
-            for (int i = 0; i < typenflags.Count; i++)
+            for(int i = 0; i < typenflags.Count; i++)
             {
                 if ((bool)typenflags[i])
                     data[i] = 1;
                 else
                     data[i] = 0;
             }
-            var flag = Convert.ToString(data[0]) + Convert.ToString(data[1]) + Convert.ToString(data[2]) + Convert.ToString(data[3]) + Convert.ToString(data[4]);
+            var flags = Convert.ToString(data[0]) + Convert.ToString(data[1]) + Convert.ToString(data[2]) + Convert.ToString(data[3]) + Convert.ToString(data[4]);
             var type = Convert.ToString(data[5]) + Convert.ToString(data[6]) + Convert.ToString(data[7]);
-            types = (PacketTypes)Convert.ToInt32(type, 2);
-            flags = PFlags.ParseFlags(flag);
+            var packet = new PRUdpPacket();
+            packet.Type = (PacketTypes)Convert.ToInt32(type, 2);
+            packet.Flags = PFlags.ParseFlags(flags);
+            if(packet.Type == PacketTypes.SYN || packet.Type == PacketTypes.CONNECT)
+            {
+                sessionid = hex.Substring(6, 2);
+                sig = hex.Substring(8, 8);
+                seqnum = hex.Substring(16, 4);
+                connsig = hex.Substring(20, 8);
+                /*var f = connsig.Substring(0, 2);
+                var ff = connsig.Substring(2, 2);
+                var fff = connsig.Substring(4, 2);
+                var ffff = connsig.Substring(6, 2);
+                connsig = ffff + fff + ff + f;*/
+            }
+            else if(packet.Type == PacketTypes.DATA)
+            {
+                sessionid = hex.Substring(6, 2);
+                sig = hex.Substring(8, 8);
+                seqnum = hex.Substring(16, 4);
+                fragid = hex.Substring(20, 2);
+                payload = PythonScript.DecompressPacketPayload(RC4.Decrypt(Encoding.ASCII.GetBytes("CD&ML"), hex.Substring(22, hex.Length - 30).FromHex()).ToHex().Substring(2)).Result;
+                packet.RMCPayload = RMCPayload.Decode(payload);
+            }
+            else
+            {
+                sessionid = hex.Substring(6, 2);
+                seqnum = hex.Substring(8, 4);
+            }
+            packet.SessionId = sessionid;
+            packet.Signature = sig;
+            packet.Checksum = checksum;
+            packet.ConnectionSignature = connsig;
+            packet.Payload = payload;
+            return packet;
         }
     }
 }
