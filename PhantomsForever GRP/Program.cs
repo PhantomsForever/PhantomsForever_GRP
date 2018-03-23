@@ -16,6 +16,7 @@ namespace PhantomsForever_GRP
 {
     class Program
     {
+        [STAThread]
         static void Main(string[] args)
         {
             if(!File.Exists(Settings.Python36Path))
